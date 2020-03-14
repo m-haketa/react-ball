@@ -39,7 +39,7 @@ export const useBall = (
     AirResistance,
     FricitionalResistance,
     Interval
-  } = Object.assign({}, { ...initProps }, props ? props : {});
+  } = Object.assign({}, initProps, props ? props : {});
 
   const [ball, setBall] = useState({
     x: 100,
