@@ -17,6 +17,15 @@ const initProps = {
   Interval: 50
 };
 
+const calculateNorm = (...params: number[]): number => {
+  return Math.sqrt(
+    params.reduce((acc, value) => {
+      acc += value ** 2;
+      return acc;
+    }, 0)
+  );
+};
+
 export const useBall = (
   props?: typeof initProps
 ): Position & { onMouseUp: typeof onMouseUp } => {
@@ -45,7 +54,7 @@ export const useBall = (
       ...prevBall,
       vx: (x - prevBall.x) * distanceVerocityRatio,
       vy: (y - prevBall.y) * distanceVerocityRatio,
-      vz: Math.sqrt((x - prevBall.x) ** 2 + (y - prevBall.y) ** 2) * vz_xyRatio
+      vz: calculateNorm(x - prevBall.x, y - prevBall.y) * vz_xyRatio
     }));
   };
 
@@ -64,12 +73,7 @@ export const useBall = (
   };
 
   const move = (): boolean => {
-    if (
-      Math.abs(ball.vx) <= 0.5 &&
-      Math.abs(ball.vy) <= 0.5 &&
-      Math.abs(ball.vz) <= 0.5 &&
-      ball.z === 0
-    ) {
+    if (calculateNorm(ball.vx, ball.vy, ball.vz) <= 1 && ball.z === 0) {
       setBall(prevBall => ({
         ...prevBall,
         vx: 0,
