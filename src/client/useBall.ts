@@ -10,7 +10,6 @@ const initProps = {
   distanceVerocityRatio: 0.09,
   vz_xyRatio: 0.1,
   az: -2,
-  vzBounceLimit: 5,
   vzBounceRate: 0.15,
   AirResistance: 0.95,
   FricitionalResistance: 0.85,
@@ -26,6 +25,9 @@ const calculateNorm = (...params: number[]): number => {
   );
 };
 
+const roundTo = (num: number, digit: number): number =>
+  Math.round(num * 10 ** digit) / 10 ** digit;
+
 export const useBall = (
   props?: typeof initProps
 ): Position & { onMouseUp: typeof onMouseUp } => {
@@ -33,7 +35,6 @@ export const useBall = (
     distanceVerocityRatio,
     vz_xyRatio,
     az,
-    vzBounceLimit,
     vzBounceRate,
     AirResistance,
     FricitionalResistance,
@@ -96,9 +97,7 @@ export const useBall = (
         (prevBall.z === 0 ? FricitionalResistance : AirResistance),
       vz:
         prevBall.z <= 0 && prevBall.vz < 0
-          ? prevBall.vz < -vzBounceLimit
-            ? prevBall.vz * -vzBounceRate
-            : 0
+          ? roundTo(prevBall.vz * -vzBounceRate, 2)
           : prevBall.vz + az
     }));
     return true;
