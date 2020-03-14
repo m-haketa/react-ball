@@ -44,7 +44,7 @@ export const useBall = (
   const [ball, setBall] = useState({
     x: 100,
     y: 100,
-    z: 30,
+    z: 100,
     vx: 0,
     vy: 0,
     vz: 0
@@ -96,7 +96,7 @@ export const useBall = (
         prevBall.vy *
         (prevBall.z === 0 ? FricitionalResistance : AirResistance),
       vz:
-        prevBall.z <= 0 && prevBall.vz < 0
+        prevBall.z + prevBall.vz < 0
           ? roundTo(prevBall.vz * -vzBounceRate, 2)
           : prevBall.vz + az
     }));
