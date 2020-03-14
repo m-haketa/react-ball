@@ -4,7 +4,6 @@ import { Ball } from './Ball';
 
 import './style.css';
 
-//onMouseDown={} onMouseMove={} onMouseUp={}
 export const App: React.FC = () => {
   const { onMouseUp, ...ballPosition } = useBall();
 
