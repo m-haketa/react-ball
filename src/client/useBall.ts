@@ -19,7 +19,7 @@ const initProps = {
 
 export const useBall = (
   props?: typeof initProps
-): Position & { moveTo: typeof moveTo } => {
+): Position & { onMouseUp: typeof onMouseUp } => {
   const {
     distanceVerocityRatio,
     vz_xyRatio,
@@ -47,6 +47,20 @@ export const useBall = (
       vy: (y - prevBall.y) * distanceVerocityRatio,
       vz: Math.sqrt((x - prevBall.x) ** 2 + (y - prevBall.y) ** 2) * vz_xyRatio
     }));
+  };
+
+  const onMouseUp = (e: React.MouseEvent<SVGSVGElement, MouseEvent>): void => {
+    const svg = e.currentTarget;
+    const pt = svg.createSVGPoint();
+
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+
+    const ctm = svg.getScreenCTM();
+    if (ctm) {
+      const cursorPt = pt.matrixTransform(ctm.inverse());
+      moveTo({ x: cursorPt.x, y: cursorPt.y });
+    }
   };
 
   const move = (): boolean => {
@@ -92,5 +106,5 @@ export const useBall = (
     }
   });
 
-  return { x: ball.x, y: ball.y, z: ball.z, moveTo };
+  return { x: ball.x, y: ball.y, z: ball.z, onMouseUp };
 };
